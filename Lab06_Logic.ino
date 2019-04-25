@@ -88,6 +88,8 @@ void start_run(int frontSensor){//, int leftSensor, int rightSensor, int middleS
     if(!frontSensor && counter == 1){// && !leftSensor && !rightSensor && !middleSensor && counter==1){
        L_drive_motor(1,1,1,1,HIGH);
        R_drive_motor(1,1,1,1,HIGH);  
+       
+       //delay(700);
        counter++;
     }
 }
@@ -139,36 +141,36 @@ void firstTwoLeft(int leftSensor , int rightSensor, int counter){//to left
     if (!leftSensor && !rightSensor && (counter==2||counter==3)) {
     digitalWrite(pinLdir, LOW);
     digitalWrite(pinRdir, HIGH);
-    delay(200);
+    delay(100);//tadqi200
     counter++;
     }
 }
 
-void thirdRight(int leftSensor , int rightSensor, int counter){//to right
+void thirdRight(int leftSensor , int rightSensor, int counter){     //to right
     if (!leftSensor && !rightSensor && counter==4) {
     digitalWrite(pinLdir, HIGH);
     digitalWrite(pinRdir, LOW);
-    delay(200);
+    delay(100);
     counter++;
     }
 }
 
-void justDrive(int middleSensor, int leftSensor, int rightSensor){
+void justDrive(int middleSensor, int leftSensor, int rightSensor, int counter){
     if (!middleSensor) {
       if(leftSensor && rightSensor){
         digitalWrite(pinLdir, HIGH);
         digitalWrite(pinRdir, HIGH);
-        delay(200);
+        delay(35);
       }
       else if(!leftSensor && rightSensor){
         digitalWrite(pinLdir, LOW);
         digitalWrite(pinRdir, HIGH);
-        delay(200);  
+        delay(35);  
       }
        else if(leftSensor && !rightSensor){
         digitalWrite(pinLdir, HIGH);
         digitalWrite(pinRdir, LOW);
-        delay(200);  
+        delay(35);  
       }
   }
 }
@@ -180,11 +182,13 @@ void loop() {
   middleSensor = digitalRead(pinMiddleSensor);
   frontSensor = digitalRead(pinFrontSensor);
 
-  stop();  //counter jadi 1                                                              
-  start_run(frontSensor);//, leftSensor, rightSensor, middleSensor, counter);  //counter udah 2
-  justDrive(middleSensor, leftSensor, rightSensor);
+  stop();                                                                                 //counter jadi 1                                                              
+  start_run(frontSensor);//, leftSensor, rightSensor, middleSensor, counter);             //counter udah 2
+  //justDrive(middleSensor, leftSensor, rightSensor, counter);
   firstTwoLeft(leftSensor, rightSensor, counter);
-  justDrive(middleSensor, leftSensor, rightSensor);
+  justDrive(middleSensor, leftSensor, rightSensor, counter);
   thirdRight(leftSensor, rightSensor, counter);
+  
+    
   
 }
