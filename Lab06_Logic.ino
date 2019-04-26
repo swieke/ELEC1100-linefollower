@@ -89,7 +89,7 @@ void start_run(int frontSensor){//, int leftSensor, int rightSensor, int middleS
        L_drive_motor(1,1,1,1,HIGH);
        R_drive_motor(1,1,1,1,HIGH);  
        
-       //delay(700);
+       delay(500);
        counter++;
     }
 }
@@ -141,7 +141,7 @@ void firstTwoLeft(int leftSensor , int rightSensor, int counter){//to left
     if (!leftSensor && !rightSensor && (counter==2||counter==3)) {
     digitalWrite(pinLdir, LOW);
     digitalWrite(pinRdir, HIGH);
-    delay(100);//tadqi200
+    delay(220);//tadqi200
     counter++;
     }
 }
@@ -150,27 +150,27 @@ void thirdRight(int leftSensor , int rightSensor, int counter){     //to right
     if (!leftSensor && !rightSensor && counter==4) {
     digitalWrite(pinLdir, HIGH);
     digitalWrite(pinRdir, LOW);
-    delay(100);
+    delay(220);
     counter++;
     }
 }
 
 void justDrive(int middleSensor, int leftSensor, int rightSensor, int counter){
-    if (!middleSensor) {
+    if (!middleSensor && (counter>=2)) {
       if(leftSensor && rightSensor){
         digitalWrite(pinLdir, HIGH);
         digitalWrite(pinRdir, HIGH);
-        delay(35);
+        delay(20); //35
       }
       else if(!leftSensor && rightSensor){
         digitalWrite(pinLdir, LOW);
         digitalWrite(pinRdir, HIGH);
-        delay(35);  
+        delay(20);  
       }
        else if(leftSensor && !rightSensor){
         digitalWrite(pinLdir, HIGH);
         digitalWrite(pinRdir, LOW);
-        delay(35);  
+        delay(20);  
       }
   }
 }
