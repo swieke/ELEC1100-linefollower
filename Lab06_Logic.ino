@@ -31,6 +31,10 @@ int rightSensor =1;
 int middleSensor = 1;
 int frontSensor =1;
 int counter= 0;
+long time_now = 0;
+long time_then = 0;
+long elapsed = 0;
+
 
 // the setup function runs once when you press reset or power the board
 
@@ -88,6 +92,7 @@ void R_drive_motor(int RQ3,int RQ2,int RQ1,int RQ0,int Rdir)
 
 void start_run(int frontSensor){//, int leftSensor, int rightSensor, int middleSensor, int counter){
     if(!frontSensor && counter == 1){// && !leftSensor && !rightSensor && !middleSensor && counter==1){
+       time_now = millis(); 
        L_drive_motor(1,1,1,1,HIGH);
        R_drive_motor(1,1,1,1,HIGH);  
        
@@ -143,18 +148,38 @@ void firstTwoLeft(int leftSensor , int rightSensor, int counter, int middleSenso
     if (!leftSensor && !rightSensor && (counter==2||counter==3)) {
     digitalWrite(pinLdir, LOW);
     digitalWrite(pinRdir, HIGH);
-    delay(200);//tadqi200
+    delay(200);//tadi200
     counter++;
     }
 }
 
-void thirdRight(int leftSensor , int rightSensor, int counter, int middleSensor){     //to right
-    if (!leftSensor && !rightSensor && counter==4 ) {
+void thirdRight(int leftSensor , int rightSensor, int counter, int middleSensor, long time_now){     //to right
+    if (!leftSensor && !rightSensor && counter==4 && (time_now>5000 && time_now<16000)) {           //~11000 ms sejak start
     digitalWrite(pinLdir, HIGH);
     digitalWrite(pinRdir, LOW);
     delay(200);
     counter++;
     }
+}
+
+void sharpTurn(int leftSensor , int rightSensor, int counter, int middleSensor, long time_now){ //combine firstTwoLeft and thirdRight
+    if(!leftSensor && !rightSensor){
+      time_then = millis();
+      elapsed = (time_then - time_now);
+      
+      if(/*counter==2||counter==3*/elapsed<5500){
+        digitalWrite(pinLdir, LOW);
+        digitalWrite(pinRdir, HIGH);
+        delay(200);     //tadi200
+        counter++;
+      }
+      else if(/*counter==4 && */(elapsed>5500 && elapsed<16000)){
+        digitalWrite(pinLdir, HIGH);
+        digitalWrite(pinRdir, LOW);
+        delay(200);
+        counter++;
+      }
+    }  
 }
 
 void justDrive(int middleSensor, int leftSensor, int rightSensor, int counter){
@@ -181,7 +206,7 @@ void turnBackWall(int frontSensor, int counter){
   if(counter>2 && !frontSensor){
       digitalWrite (pinLdir, LOW);
       digitalWrite (pinRdir, HIGH);
-      delay(1000);
+      delay(2000);
       digitalWrite(pinLdir, HIGH);
       digitalWrite(pinRdir, HIGH);
       delay(1000);
@@ -197,13 +222,15 @@ void loop() {
   middleSensor = digitalRead(pinMiddleSensor);
   frontSensor = digitalRead(pinFrontSensor);
 
-  stop();                                                                                 //counter jadi 1                                                              
-  start_run(frontSensor);//, leftSensor, rightSensor, middleSensor, counter);             //counter udah 2
+  stop();                                                                                 //counter 0 jadi 1                                                              
+  start_run(frontSensor);//, leftSensor, rightSensor, middleSensor, counter);             //counter 1 jadi 2
   justDrive(middleSensor, leftSensor, rightSensor, counter);
-  firstTwoLeft(leftSensor, rightSensor, counter, middleSensor);
+  
+
+  sharpTurn(leftSensor, rightSensor, counter, middleSensor, time_now);
   justDrive(middleSensor, leftSensor, rightSensor, counter);
-  //thirdRight(leftSensor, rightSensor, counter, middleSensor);
-  //turnBackWall(frontSensor, counter);
+
+  turnBackWall(frontSensor, counter);
   
     
   
