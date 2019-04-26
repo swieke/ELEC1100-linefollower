@@ -203,15 +203,26 @@ void justDrive(int middleSensor, int leftSensor, int rightSensor, int counter){
 }
 
 void turnBackWall(int frontSensor, int counter){
-  if(counter>2 && !frontSensor){
-      digitalWrite (pinLdir, LOW);
-      digitalWrite (pinRdir, HIGH);
-      delay(2000);
-      digitalWrite(pinLdir, HIGH);
-      digitalWrite(pinRdir, HIGH);
-      delay(1000);
+  time_then = millis();
+  elapsed = (time_then - time_now);
+  
+  if(elapsed>10000&&!frontSensor){
       L_drive_motor(0,0,0,0,LOW);
       R_drive_motor(0,0,0,0,LOW);
+      delay(500);
+      R_drive_motor(1,1,1,1,HIGH);
+      L_drive_motor(1,1,1,1,LOW);
+      
+      //digitalWrite (pinLdir, LOW);
+      //digitalWrite (pinRdir, HIGH);
+      
+      delay(1500);
+      R_drive_motor(1,1,1,1,HIGH);
+      L_drive_motor(1,1,1,1,HIGH);
+      delay(4000);
+      L_drive_motor(0,0,0,0,LOW);
+      R_drive_motor(0,0,0,0,LOW);
+      delay(1000000);
   }  
 }
 
@@ -230,7 +241,7 @@ void loop() {
   sharpTurn(leftSensor, rightSensor, counter, middleSensor, time_now);
   justDrive(middleSensor, leftSensor, rightSensor, counter);
 
-  turnBackWall(frontSensor, counter);
+  turnBackWall(frontSensor,counter);
   
     
   
