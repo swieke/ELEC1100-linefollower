@@ -216,7 +216,7 @@ void turnBackWall(int frontSensor, int counter){
       //digitalWrite (pinLdir, LOW);
       //digitalWrite (pinRdir, HIGH);
       
-      delay(950); //dari 1500
+      delay(650); //dari 1500
       R_drive_motor(1,1,1,1,HIGH);
       L_drive_motor(1,1,1,1,HIGH);
       delay(600);
