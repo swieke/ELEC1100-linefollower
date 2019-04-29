@@ -3,7 +3,9 @@
   Group 86
   FPN & TA
   
-  NEED FULL BATTERY
+  NEED FULL BATTERY, TEST FEW TIMES AFTER FULLY CHARGED
+  ALIGN THE CONNECTOR TO BATTERY INDICATOR WELL
+  CHECK SENSOR ORIENTATION
 */
 
 // assign meaningful names to those pins that will be used
