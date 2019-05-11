@@ -1,6 +1,6 @@
 /*
-  ELEC1100
-  Group 86
+  ELEC1100 Spring 2019 HKUST
+  Group 086
   Theo Azriel and Ferris Prima Nugraha 
   20541062  and 20543826
   
@@ -30,10 +30,10 @@
 
 //define variables to be used in script
 int leftSensor = 1;
-int rightSensor =1;
+int rightSensor = 1;
 int middleSensor = 1;
-int frontSensor =1;
-int counter= 0;
+int frontSensor = 1;
+int counter = 0;
 long time_now = 0;
 long time_then = 0;
 long elapsed = 0;
@@ -72,8 +72,7 @@ void setup() {
   digitalWrite(pinRdir, HIGH);        // LOW:  move backward
 }
 
-void L_drive_motor(int LQ3,int LQ2,int LQ1,int LQ0,int Ldir)
-{
+void L_drive_motor(int LQ3,int LQ2,int LQ1,int LQ0,int Ldir){
   digitalWrite(pinLQ3, LQ3);
   digitalWrite(pinLQ2, LQ2);
   digitalWrite(pinLQ1, LQ1);
@@ -81,8 +80,7 @@ void L_drive_motor(int LQ3,int LQ2,int LQ1,int LQ0,int Ldir)
   digitalWrite(pinLdir,Ldir);
 }
 
-void R_drive_motor(int RQ3,int RQ2,int RQ1,int RQ0,int Rdir)
-{
+void R_drive_motor(int RQ3,int RQ2,int RQ1,int RQ0,int Rdir){
   digitalWrite(pinRQ3, RQ3);
   digitalWrite(pinRQ2, RQ2);
   digitalWrite(pinRQ1, RQ1);
@@ -101,14 +99,14 @@ void start_run(int frontSensor){
 }
 
 void stop(){ 
-  if (counter==0) {
-  L_drive_motor(0,0,0,0,LOW);
-  R_drive_motor(0,0,0,0,LOW);
-  counter++;
+  if(counter==0){
+    L_drive_motor(0,0,0,0,LOW);
+    R_drive_motor(0,0,0,0,LOW);
+    counter++;
   }
 }
 
-void sharpTurn(int leftSensor , int rightSensor, int middleSensor){
+void sharpTurn(int leftSensor , int rightSensor){
     if(!leftSensor && !rightSensor){
       time_then = millis();
       elapsed = (time_then - time_now);
@@ -162,7 +160,7 @@ void turnBackWall(int frontSensor){
     
       L_drive_motor(0,0,0,0,LOW);
       R_drive_motor(0,0,0,0,LOW);
-      delay(1000000);//"stop"
+      delay(1000000);
   }  
 }
 
@@ -175,6 +173,6 @@ void loop() {
   stop();                                                                                                                                             
   start_run(frontSensor);             
   justDrive(middleSensor, leftSensor, rightSensor, counter);
-  sharpTurn(leftSensor, rightSensor, middleSensor);
+  sharpTurn(leftSensor, rightSensor);
   turnBackWall(frontSensor);
 }
