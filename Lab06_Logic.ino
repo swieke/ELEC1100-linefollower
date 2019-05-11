@@ -1,7 +1,8 @@
 /*
   ELEC1100
   Group 86
-  FPN & TA
+  Theo Azriel and Ferris Prima Nugraha 
+  20541062  and 20543826
   
   NEED FULL BATTERY, TEST FEW TIMES AFTER FULLY CHARGED
   ALIGN THE CONNECTOR TO BATTERY INDICATOR WELL
@@ -37,10 +38,7 @@ long time_now = 0;
 long time_then = 0;
 long elapsed = 0;
 
-
 // the setup function runs once when you press reset or power the board
-
-
 void setup() {
   // define pins as input and output.
   pinMode(pinLeftSensor, INPUT);
@@ -92,12 +90,11 @@ void R_drive_motor(int RQ3,int RQ2,int RQ1,int RQ0,int Rdir)
   digitalWrite(pinRdir,Rdir);
 }
 
-void start_run(int frontSensor){//, int leftSensor, int rightSensor, int middleSensor, int counter){
-    if(!frontSensor && counter == 1){// && !leftSensor && !rightSensor && !middleSensor && counter==1){
+void start_run(int frontSensor){
+    if(!frontSensor && counter == 1){
        time_now = millis(); 
        L_drive_motor(1,1,1,1,HIGH);
        R_drive_motor(1,1,1,1,HIGH);  
-       
        delay(600);
        counter++;
     }
@@ -111,75 +108,20 @@ void stop(){
   }
 }
 
-void adjust(int middleSensor, int rightSensor, int leftSensor, int counter){
-  //buat jalan sebelum belokan ketiga
-  if(!middleSensor && counter >=2 && counter <=4){
-    if(leftSensor && rightSensor){
-      L_drive_motor(1,1,1,1,HIGH);
-      R_drive_motor(1,1,1,1,HIGH);                //gas pollllllllll
-    }
-    else if(!leftSensor && rightSensor){
-      L_drive_motor(0,1,0,1,HIGH);
-      R_drive_motor(1,1,1,1,HIGH);                //kirii
-    }
-    
-    else if(leftSensor && !rightSensor){
-      L_drive_motor(0,1,0,1,HIGH);
-      R_drive_motor(1,1,1,1,HIGH);                //kanann
-    }
-  }
-  //buat jalan setelah belokan ketiga
-  //if
-}
-
-
-void splitPath(int leftSensor, int rightSensor, int middleSensor){
-  if(!leftSensor && !rightSensor){          //lagi galau
-     if(counter==2 || counter==3){                          //2 pertama ke kiri
-       L_drive_motor(0,1,0,1,HIGH);
-       R_drive_motor(1,1,1,1,HIGH);
-     }
-     if(counter==4){                                        //ketiga ke kanan
-       L_drive_motor(1,1,1,1,HIGH);
-       R_drive_motor(0,1,0,1,HIGH); 
-     }
-  }
-}
-
-void firstTwoLeft(int leftSensor , int rightSensor, int counter, int middleSensor){//to left
-    if (!leftSensor && !rightSensor && (counter==2||counter==3)) {
-    digitalWrite(pinLdir, LOW);
-    digitalWrite(pinRdir, HIGH);
-    delay(200);//tadi200
-    counter++;
-    }
-}
-
-void thirdRight(int leftSensor , int rightSensor, int counter, int middleSensor, long time_now){     //to right
-    if (!leftSensor && !rightSensor && counter==4 && (time_now>5000 && time_now<16000)) {           //~11000 ms sejak start
-    digitalWrite(pinLdir, HIGH);
-    digitalWrite(pinRdir, LOW);
-    delay(200);
-    counter++;
-    }
-}
-
-void sharpTurn(int leftSensor , int rightSensor, int counter, int middleSensor, long time_now){ //combine firstTwoLeft and thirdRight
+void sharpTurn(int leftSensor , int rightSensor, int middleSensor){
     if(!leftSensor && !rightSensor){
       time_then = millis();
       elapsed = (time_then - time_now);
       
-      if(/*counter==2||counter==3*/elapsed<5500){
+      if(elapsed<5500){
         digitalWrite(pinLdir, LOW);
         digitalWrite(pinRdir, HIGH);
-        delay(200);     //tadi200
-        counter++;
+        delay(200);     
       }
-      else if(/*counter==4 && */(elapsed>5500 && elapsed<16000)){
+      else{
         digitalWrite(pinLdir, HIGH);
         digitalWrite(pinRdir, LOW);
         delay(200);
-        counter++;
       }
     }  
 }
@@ -189,62 +131,50 @@ void justDrive(int middleSensor, int leftSensor, int rightSensor, int counter){
       if(leftSensor && rightSensor){
         digitalWrite(pinLdir, HIGH);
         digitalWrite(pinRdir, HIGH);
-        //delay(20); //35
       }
       else if(!leftSensor && rightSensor){
         digitalWrite(pinLdir, LOW);
         digitalWrite(pinRdir, HIGH);
-        //delay(20);  
       }
        else if(leftSensor && !rightSensor){
         digitalWrite(pinLdir, HIGH);
         digitalWrite(pinRdir, LOW);
-        //delay(20);  
       }
   }
 }
 
-void turnBackWall(int frontSensor, int counter){
+void turnBackWall(int frontSensor){
   time_then = millis();
   elapsed = (time_then - time_now);
   
-  if(elapsed>10000&&!frontSensor){
+  if(elapsed>10000 && !frontSensor){
       L_drive_motor(0,0,0,0,LOW);
       R_drive_motor(0,0,0,0,LOW);
       delay(500);
+    
       R_drive_motor(1,1,1,1,HIGH);
       L_drive_motor(1,1,1,1,LOW);
-      
-      //digitalWrite (pinLdir, LOW);
-      //digitalWrite (pinRdir, HIGH);
-      
-      delay(650); //dari 1500
+      delay(650);
+    
       R_drive_motor(1,1,1,1,HIGH);
       L_drive_motor(1,1,1,1,HIGH);
       delay(600);
+    
       L_drive_motor(0,0,0,0,LOW);
       R_drive_motor(0,0,0,0,LOW);
-      delay(1000000);
+      delay(1000000);//"stop"
   }  
 }
 
 void loop() {
-
   leftSensor = digitalRead(pinLeftSensor);
   rightSensor = digitalRead(pinRightSensor);
   middleSensor = digitalRead(pinMiddleSensor);
   frontSensor = digitalRead(pinFrontSensor);
 
-  stop();                                                                                 //counter 0 jadi 1                                                              
-  start_run(frontSensor);//, leftSensor, rightSensor, middleSensor, counter);             //counter 1 jadi 2
+  stop();                                                                                                                                             
+  start_run(frontSensor);             
   justDrive(middleSensor, leftSensor, rightSensor, counter);
-  
-
-  sharpTurn(leftSensor, rightSensor, counter, middleSensor, time_now);
-  justDrive(middleSensor, leftSensor, rightSensor, counter);
-
-  turnBackWall(frontSensor,counter);
-  
-    
-  
+  sharpTurn(leftSensor, rightSensor, middleSensor);
+  turnBackWall(frontSensor);
 }
